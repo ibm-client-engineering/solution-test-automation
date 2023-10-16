@@ -38,14 +38,15 @@ jobs:
         id: check_directory
         uses: JJ/files-present-action@releases/v1
         with:
-#          files: 'dashboard/README.md'
-          files: 'docs/README.md'
+          files: 'dashboard/README.md'
       - name: No Dashboard
         if: ${{ failure() && steps.check_directory.conclusion == 'failure' }}
         run: |
-          mkdir dashboard
-          echo "README" > dashboard/README.md
-          git add dashboard
+          git config --local user.name ${{ github.actor }}
+          git config --local user.email "${{ github.actor}}@users.noreply.github.com"
+          mkdir ./dashboard
+          echo "README" > ./dashboard/README.md
+          git add ./dashboard
           git commit -m "Dashboard directory created!"
 
       - name: Push the repo up to our internal github
