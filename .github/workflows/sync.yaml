@@ -38,7 +38,8 @@ jobs:
         id: check_directory
         uses: JJ/files-present-action@releases/v1
         with:
-          files: 'dashboard/README.md'
+#          files: 'dashboard/README.md'
+          files: 'docs/README.md'
       - name: No Dashboard
         if: ${{ failure() && steps.check_directory.conclusion == 'failure' }}
         run: |
