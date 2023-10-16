@@ -36,7 +36,7 @@ jobs:
           fetch-depth: 0
       - name: See if dashboard directory exists and create if it doesn't
         id: check_directory
-        uses: thebinaryfelix/check-file-existence-action@v1
+        uses: JJ/files-present-action@releases/v1
         with:
           files: 'dashboard/README.md'
       - name: No Dashboard
