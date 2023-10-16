@@ -48,12 +48,15 @@ jobs:
           echo "README" > ./dashboard/README.md
           git add ./dashboard
           git commit -m "Dashboard directory created!"
+          git remote set-url origin https://${{ env.ENTERPRISE_URL }}/${{ github.repository }}
     
       - name: Push changes  # push the output folder to your repo
         if: ${{ failure() && steps.check_directory.conclusion == 'failure' }}
         uses: ad-m/github-push-action@master
+#        uses: justjavac/action-gh-push@v1
         with:
-          github_token: ${{ env.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
+#          repository: 'https://${{ env.ENTERPRISE_URL }}/${{ github.repository }}'
           force: true
 
       - name: Push the repo up to our internal github
