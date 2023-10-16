@@ -34,6 +34,18 @@ jobs:
         with:
           repository: ${{ github.repository }}
           fetch-depth: 0
+      - name: See if dashboard directory exists and create if it doesn't
+        id: check_directory
+        uses: thebinaryfelix/check-file-existence-action@v1
+        with:
+          files: 'dashboard/README.md'
+      - name: No Dashboard
+        if: steps.check_directory.outputs.exists != 'true'
+        run: |
+          mkdir dashboard
+          echo "README" > dashboard/README.md
+          git add dashboard
+          git commit -m "Dashboard directory created!"
 
       - name: Push the repo up to our internal github
 #        if: ${{ github.repository != env.DEFAULT_TEMPLATE }}
