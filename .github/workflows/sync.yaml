@@ -40,7 +40,7 @@ jobs:
         with:
           files: 'dashboard/README.md'
       - name: No Dashboard
-        if: steps.check_directory.outputs.exists != 'true'
+        if: ${{ failure() && steps.check_directory.conclusion == 'failure' }}
         run: |
           mkdir dashboard
           echo "README" > dashboard/README.md
