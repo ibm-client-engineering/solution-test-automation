@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkwebsite=self.webpackChunkwebsite||[]).push([[671],{2993:e=>{e.exports=JSON.parse('{"permalink":"/solution-test-automation/blog/tags/sprint","page":1,"postsPerPage":10,"totalPages":1,"totalCount":1,"blogDescription":"Blog","blogTitle":"Journey Log"}')}}]);
