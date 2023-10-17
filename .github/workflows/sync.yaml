@@ -25,15 +25,16 @@ jobs:
           echo ${{ env.GITHUB_TOKEN }} > /tmp/token.txt
           gh auth login -p https -h ${{ env.ENTERPRISE_URL }} --with-token < /tmp/token.txt
           gh repo create --public ${{ github.repository }}
-  sync:
+
+  update:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo and all branches to stage
-        if: ${{ github.repository != env.DEFAULT_TEMPLATE }}
-        uses: actions/checkout@v3
+      - name: Checkout Enterprise repo and all branches
+        uses: actions/checkout@v4
         with:
+          github-server-url: https://${{ env.GHE_USER }}@${{ env.ENTERPRISE_URL }}
           repository: ${{ github.repository }}
-          fetch-depth: 0
+          token: ${{ env.GITHUB_TOKEN }}
       - name: See if dashboard directory exists and create if it doesn't
         id: check_directory
         uses: JJ/files-present-action@releases/v1
@@ -42,15 +43,15 @@ jobs:
       - name: No Dashboard
         if: ${{ failure() && steps.check_directory.conclusion == 'failure' }}
         run: |
-          git config --local user.name ${{ github.actor }}
-          git config --local user.email "${{ github.actor}}@users.noreply.github.com"
+          git config --local user.name ${{ env.GHE_USER }}
+          git config --local user.email "${{ env.GHE_USER }}@users.noreply.github.com"
           mkdir ./dashboard
           echo "README" > ./dashboard/README.md
           git add ./dashboard
           git commit -m "Dashboard directory created!"
+          git push
 #          git remote set-url origin https://${{ env.GHE_USER }}:${{ env.GITHUB_TOKEN }}@${{ env.ENTERPRISE_URL }}/${{ github.repository }}
 #          git push
-          
 #      - name: Push changes  # push the output folder to your repo
 #        if: ${{ failure() && steps.check_directory.conclusion == 'failure' }}
 #        uses: ad-m/github-push-action@master
@@ -59,6 +60,16 @@ jobs:
 #          GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
 ##          repository: 'https://${{ env.ENTERPRISE_URL }}/${{ github.repository }}'
 #          force: true
+    
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo and all branches to stage
+#        if: ${{ github.repository != env.DEFAULT_TEMPLATE }}
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ github.repository }}
+          fetch-depth: 0
 
       - name: Push the repo up to our internal github
 #        if: ${{ github.repository != env.DEFAULT_TEMPLATE }}
