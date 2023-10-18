@@ -26,40 +26,40 @@ jobs:
           gh auth login -p https -h ${{ env.ENTERPRISE_URL }} --with-token < /tmp/token.txt
           gh repo create --public ${{ github.repository }}
 
-  update:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Enterprise repo and all branches
-        uses: actions/checkout@v4
-        with:
-          github-server-url: https://${{ env.GHE_USER }}@${{ env.ENTERPRISE_URL }}
-          repository: ${{ github.repository }}
-          token: ${{ env.GITHUB_TOKEN }}
-      - name: See if dashboard directory exists and create if it doesn't
-        id: check_directory
-        uses: JJ/files-present-action@releases/v1
-        with:
-          files: 'dashboard/README.md'
-      - name: No Dashboard
-        if: ${{ failure() && steps.check_directory.conclusion == 'failure' }}
-        run: |
-          git config --local user.name ${{ env.GHE_USER }}
-          git config --local user.email "${{ env.GHE_USER }}@users.noreply.github.com"
-          mkdir ./dashboard
-          echo "README" > ./dashboard/README.md
-          git add ./dashboard
-          git commit -m "Dashboard directory created!"
-          git push
-#          git remote set-url origin https://${{ env.GHE_USER }}:${{ env.GITHUB_TOKEN }}@${{ env.ENTERPRISE_URL }}/${{ github.repository }}
-#          git push
-#      - name: Push changes  # push the output folder to your repo
-#        if: ${{ failure() && steps.check_directory.conclusion == 'failure' }}
-#        uses: ad-m/github-push-action@master
-##        uses: justjavac/action-gh-push@v1
+#  update:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout Enterprise repo and all branches
+#        uses: actions/checkout@v4
 #        with:
-#          GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
+#          github-server-url: https://${{ env.GHE_USER }}@${{ env.ENTERPRISE_URL }}
+#          repository: ${{ github.repository }}
+#          token: ${{ env.GITHUB_TOKEN }}
+#      - name: See if dashboard directory exists and create if it doesn't
+#        id: check_directory
+#        uses: JJ/files-present-action@releases/v1
+#        with:
+#          files: 'dashboard/README.md'
+#      - name: No Dashboard
+#        if: ${{ failure() && steps.check_directory.conclusion == 'failure' }}
+#        run: |
+#          git config --local user.name ${{ env.GHE_USER }}
+#          git config --local user.email "${{ env.GHE_USER }}@users.noreply.github.com"
+#          mkdir ./dashboard
+#          echo "README" > ./dashboard/README.md
+#          git add ./dashboard
+#          git commit -m "Dashboard directory created!"
+#          git push
+##          git remote set-url origin https://${{ env.GHE_USER }}:${{ env.GITHUB_TOKEN }}@${{ env.ENTERPRISE_URL }}/${{ github.repository }}
+##          git push
+##      - name: Push changes  # push the output folder to your repo
+##        if: ${{ failure() && steps.check_directory.conclusion == 'failure' }}
+##        uses: ad-m/github-push-action@master
+###        uses: justjavac/action-gh-push@v1
+##        with:
+##          GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
 ##          repository: 'https://${{ env.ENTERPRISE_URL }}/${{ github.repository }}'
-#          force: true
+##          force: true
     
   sync:
     runs-on: ubuntu-latest
