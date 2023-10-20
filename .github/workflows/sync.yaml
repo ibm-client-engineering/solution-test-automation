@@ -106,7 +106,7 @@ jobs:
         run: |
           rsync -auvr --exclude '.git' public/* enterprise
           cd enterprise
-          git config --global user.name ${{ env.COMMIT_AUTHOR }}
+          git config --global user.name "${{ env.COMMIT_AUTHOR }}"
           git config --global user.email ${{ env.GHE_USER }}@users.noreply.github.com
           git commit -a -m "${{ env.COMMIT_MESSAGE }}"
       - name: Push the changes to enterprise github
