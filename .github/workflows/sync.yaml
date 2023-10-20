@@ -89,14 +89,19 @@ jobs:
           repository: ${{ github.repository }}
           fetch-depth: 0
           path: public
-      - name: Checkout our enterprise repo 
-        uses: actions/checkout@v4
-        with:
-          github-server-url: https://${{ env.GHE_USER }}@${{ env.ENTERPRISE_URL }}
-          repository: ${{ github.repository }}
-          fetch-depth: 0
-          token: ${{ env.GITHUB_TOKEN }}
-          path: enterprise
+#      - name: Checkout our enterprise repo 
+#        uses: actions/checkout@v4
+#        with:
+#          github-server-url: https://${{ env.GHE_USER }}@${{ env.ENTERPRISE_URL }}
+#          repository: ${{ github.repository }}
+#          fetch-depth: 0
+#          token: ${{ env.GITHUB_TOKEN }}
+#          path: enterprise
+      - name: Clone our enterprise repo
+        run: |
+          git config --global user.name ${{ env.COMMIT_AUTHOR }}
+          git config --global user.email ${{ env.GHE_USER }}@users.noreply.github.com
+          git clone https://${{ env.GHE_USER}}:${{ env.GITHUB_TOKEN }}@${{ env.ENTERPRISE_URL }}/${{ github.repository }}.git enterprise
       - name: Copy over all changed files from public to enterprise
         run: |
           rsync -auvr --exclude '.git' public/* enterprise
