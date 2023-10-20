@@ -94,6 +94,7 @@ jobs:
         with:
           github-server-url: https://${{ env.GHE_USER }}@${{ env.ENTERPRISE_URL }}
           repository: ${{ github.repository }}
+          fetch-depth: 0
           token: ${{ env.GITHUB_TOKEN }}
           path: enterprise
       - name: Copy over all changed files from public to enterprise
